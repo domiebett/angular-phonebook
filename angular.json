@@ -32,7 +32,9 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/global.scss",
+              "src/styles/typography.scss",
+              "src/styles/panels.scss"
             ],
             "scripts": []
           },
