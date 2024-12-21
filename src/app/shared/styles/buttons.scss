@@ -1,0 +1,86 @@
+/** BUTTON MIXINS **/
+@mixin sharedBtn {
+  @apply cursor-pointer outline-none;
+}
+
+@mixin btnPrimary {
+  @apply border-none bg-blue-500 text-gray-100;
+
+  &:hover {
+    @apply bg-blue-600;
+  }
+}
+
+@mixin btnDanger {
+  @apply border-none bg-red-500 text-gray-100;
+
+  &:hover {
+    @apply bg-red-600;
+  }
+}
+
+@mixin btnNeutral {
+  @apply bg-transparent border border-gray-800 dark:border-gray-200 text-gray-800 dark:text-gray-200;
+
+  &:hover {
+    @apply text-gray-700 dark:text-gray-300 border-gray-700 dark:border-gray-300;
+  }
+}
+
+/** BUTTON TYPES & SIZES **/
+.btn-circle {
+  @include sharedBtn();
+  @apply rounded-full h-10 min-h-10 w-10 min-w-10;
+
+  /** Sizes **/
+  &.btn-sm {
+    @apply h-8 w-8 min-h-8 min-w-8 text-sm;
+  }
+}
+
+.btn-squircle {
+  @include sharedBtn();
+  @apply rounded-sm h-10 min-h-10 w-10 min-w-10 text-base;
+
+  /** Sizes **/
+  &.btn-sm {
+    @apply h-8 w-8 min-h-8 min-w-8 text-sm;
+  }
+}
+
+/** BUTTON COLORS **/
+.btn-circle,
+.btn-squircle {
+
+  /** Styling **/
+  &.btn-primary {
+    @include btnPrimary();
+  }
+
+  &.btn-neutral {
+    @include btnNeutral();
+  }
+
+  &.btn-danger {
+    @include btnDanger();
+  }
+}
+
+.btn-text {
+  @include sharedBtn();
+
+  @apply border-none bg-none p-0 m-0 text-base;
+
+  &.btn-danger {
+    @apply text-red-500;
+
+    &:hover {
+      @apply text-red-600;
+    }
+  }
+
+  /** Sizes **/
+  &.btn-sm {
+    @apply text-base;
+  }
+}
