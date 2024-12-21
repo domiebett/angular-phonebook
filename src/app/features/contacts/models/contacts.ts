@@ -10,4 +10,5 @@ export interface IContact {
   lastViewed?: Date;
   phone: string;
   deleted?: boolean;
+  isSubmitting?: boolean;
 }

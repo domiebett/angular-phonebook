@@ -56,7 +56,6 @@ export class DataService {
   }
 
   getContact(contactId: string): Observable<IContact> {
-    console.log('getting data');
     const contact = contacts.find((contact) => contact.id === contactId);
 
     if (!contact) {

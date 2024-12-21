@@ -6,6 +6,7 @@ import {
   Observable,
   of,
   Subject,
+  take,
   tap,
 } from 'rxjs';
 import { IContact } from '../models/contacts';
@@ -31,9 +32,9 @@ export class ContactService {
     this._isFetching.next(!options.disableLoading);
 
     this.dataService.getContacts().pipe(
+      take(1),
       catchError((error) => {console.error(error);return of([]);})
     ).subscribe((contacts) => {
-      console.log(contacts);
       this._contacts.next(contacts);
       this._isFetching.next(false);
     });
@@ -45,24 +46,25 @@ export class ContactService {
 
   addContact(contact: IContact): void {
     this._isSubmitting.next(true);
-
-    this._contacts.next([...this._contacts.value, contact]);
+    // give users a smoother experience, add contact while it is being sent to the backend.
+    this._contacts.next([...this._contacts.value, {...contact, isSubmitting: true}]);
 
     this.dataService.addContact(contact).pipe(
+      delay(2000),
+      take(1),
       tap(() => this.getContacts())
     ).subscribe(() => this._isSubmitting.next(false));
   }
 
   updateContact(contact: IContact): void {
     this._isSubmitting.next(true);
-
-    console.log(contact);
-
+    // give users a smoother experience. Update contact before sending it to the backend.
     this._contacts.next(this._contacts.value.map((c) => {
-      return contact.id === c.id ? contact : c;
+      return contact.id === c.id ? {...contact, isSubmitting: true} : c;
     }));
 
     this.dataService.updateContact(contact).pipe(
+      take(1),
       catchError((e) => {console.error(e); return of(null)}),
       tap(() => this.getContacts())
     ).subscribe(() => this._isSubmitting.next(false));
@@ -73,7 +75,8 @@ export class ContactService {
 
     (contact && contact.id
       ? this.dataService.deleteContact(contact.id).pipe(
-          catchError((err) => {console.error(err);return of(null);
+        take(1),  
+        catchError((err) => {console.error(err);return of(null);
           }),
           tap(() =>this.getContacts())
         )

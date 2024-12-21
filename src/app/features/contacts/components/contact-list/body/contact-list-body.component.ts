@@ -3,11 +3,12 @@ import { IContact } from '../../../models/contacts';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-contact-list-body',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule],
   templateUrl: './contact-list-body.component.html',
   styleUrl: './contact-list-body.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
