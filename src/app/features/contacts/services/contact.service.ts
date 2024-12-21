@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, catchError, delay, Observable, of, Subject, tap } from 'rxjs';
 import { IContact } from '../models/contacts';
 import { DataService } from 'src/app/temp/data.service';
 
@@ -36,11 +36,13 @@ export class ContactService {
       });
   }
 
-  addContact(contact: IContact): void {
-    this.dataService
+  addContact(contact: IContact): Observable<IContact> {
+    return this.dataService
       .addContact(contact)
-      .subscribe((contact: IContact) =>
-        this._contacts.next([...this._contacts.value, contact])
+      .pipe(
+        tap((newContact) =>
+          this._contacts.next([...this._contacts.value, newContact])
+        )
       );
   }
 }

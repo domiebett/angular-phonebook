@@ -1,0 +1,15 @@
+<article class="px-3 py-3 rounded-xl w-full flex flex-col gap-5">
+  <header class="flex flex-row gap-4 items-end">
+    <a [routerLink]="['/contacts']" routerLinkActive="router-link-active"  class="btn-text neutral flex gap-2" aria-label="View All Contacts" title="Back">
+      <fa-icon [icon]="faArrowLeft" aria-hidden="true"></fa-icon>
+    </a>
+
+    <h2 class="h2 txt-primary text-center w-full flex-nowrap overflow-ellipsis whitespace-nowrap overflow-hidden">Add Contact</h2>
+
+    <span></span>
+  </header>
+  
+  <section class="flex flex-col gap-1 panel-secondary rounded-lg px-4 py-3">
+    <app-contact-form [isSubmitting]="isSubmitting" (onSubmit)="addContact($event)"></app-contact-form>
+  </section>
+</article>

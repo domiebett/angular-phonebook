@@ -1,10 +1,10 @@
 <header class="flex flex-row justify-between">
   <div class="flex flex-row gap-2">
     <input type="search" class="input input-sm" placeholder="Search"/>
-    <button class="btn-circle btn-sm btn-neutral"><fa-icon [icon]="faMagnifyingGlass"></fa-icon></button>
+    <button class="btn-circle btn-sm btn-neutral" routerLinkActive="router-link-active" ><fa-icon [icon]="faMagnifyingGlass"></fa-icon></button>
   </div>
 
-  <button class="btn-circle btn-sm btn-primary">
-    <fa-icon [icon]="faPlus"></fa-icon>
+  <button class="btn-circle btn-sm btn-primary" [routerLink]="['/contacts/add']" aria-label="Add Contact" title="Add Contact">
+    <fa-icon [icon]="faPlus" aria-hidden="true"></fa-icon>
   </button>
 </header>
