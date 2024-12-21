@@ -1,5 +1,5 @@
 export interface IContact {
-  id: string;
+  id?: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -7,6 +7,7 @@ export interface IContact {
   favorite: boolean;
   group: string;
   image: string;
-  lastViewed: Date;
+  lastViewed?: Date;
   phone: string;
+  deleted?: boolean;
 }

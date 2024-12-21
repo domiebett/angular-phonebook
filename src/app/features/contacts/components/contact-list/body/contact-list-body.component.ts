@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { IContact } from '../../models/contacts';
+import { IContact } from '../../../models/contacts';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
 

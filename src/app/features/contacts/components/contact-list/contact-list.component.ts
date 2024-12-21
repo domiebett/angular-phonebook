@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { ContactListHeaderComponent } from '../contact-list-header/contact-list-header.component';
-import { ContactListBodyComponent } from '../contact-list-body/contact-list-body.component';
+import { ContactListHeaderComponent } from './header/contact-list-header.component';
+import { ContactListBodyComponent } from './body/contact-list-body.component';
 import { ContactService } from '../../services/contact.service';
 import { IContact } from '../../models/contacts';
 import { Observable } from 'rxjs';
