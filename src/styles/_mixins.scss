@@ -1,7 +1,7 @@
 
 /*PANELS*/
-@mixin panelPrimary {@apply bg-white dark:bg-black; }
-@mixin panelSecondary {@apply bg-gray-100 dark:bg-gray-900;}
+@mixin panelPrimary {@apply bg-gray-200 dark:bg-black; }
+@mixin panelSecondary {@apply bg-gray-300 dark:bg-gray-900;}
 
 /**TEXT COLORS**/
 @mixin txtPrimary {@apply text-gray-800 dark:text-gray-200;}

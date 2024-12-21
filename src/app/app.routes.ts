@@ -4,8 +4,8 @@ export const routes: Routes = [
   {
     path: 'contacts',
     loadChildren: () =>
-      import('./features/contacts/contacts-routing.module').then(
-        (m) => m.ContactsRoutingModule
+      import('./features/contacts/contacts.module').then(
+        (m) => m.ContactsModule
       ),
   },
   { path: '', redirectTo: '/contacts', pathMatch: 'full' },

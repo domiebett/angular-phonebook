@@ -15,60 +15,69 @@ import { DataService } from 'src/app/temp/data.service';
   providedIn: 'root',
 })
 export class ContactService {
-  private _contacts: BehaviorSubject<IContact[]> = new BehaviorSubject<
-    IContact[]
-  >([]);
-  private _loading: Subject<boolean> = new Subject<boolean>();
+  private _contacts: BehaviorSubject<IContact[]> = new BehaviorSubject<IContact[]>([]);
+  private _isFetching: Subject<boolean> = new Subject<boolean>();
+  private _isSubmitting: Subject<boolean> = new Subject<boolean>();
 
   public contacts$: Observable<IContact[]> = this._contacts.asObservable();
-  public loading$: Observable<boolean> = this._loading.asObservable();
+  public isFetching$: Observable<boolean> = this._isFetching.asObservable();
+  public isSubmitting$: Observable<boolean> = this._isSubmitting.asObservable();
 
   constructor(private dataService: DataService) {
     this.getContacts();
   }
 
   getContacts(options: IContactOptions = {}) {
-    this._loading.next(!options.disableLoading);
+    this._isFetching.next(!options.disableLoading);
 
-    this.dataService
-      .getContacts()
-      .pipe(
-        catchError((error) => {
-          console.error(error);
-          return of([]);
-        })
-      )
-      .subscribe((contacts) => {
-        this._contacts.next(contacts);
-        this._loading.next(false);
-      });
+    this.dataService.getContacts().pipe(
+      catchError((error) => {console.error(error);return of([]);})
+    ).subscribe((contacts) => {
+      console.log(contacts);
+      this._contacts.next(contacts);
+      this._isFetching.next(false);
+    });
   }
 
-  addContact(contact: IContact): Observable<IContact> {
-    return this.dataService
-      .addContact(contact)
-      .pipe(
-        tap((newContact) =>
-          this._contacts.next([...this._contacts.value, newContact])
-        )
-      );
+  getContact(contactId: string): Observable<IContact> {
+    return this.dataService.getContact(contactId);
   }
 
-  deleteContact(contact: IContact): Observable<null> {
+  addContact(contact: IContact): void {
+    this._isSubmitting.next(true);
+
+    this._contacts.next([...this._contacts.value, contact]);
+
+    this.dataService.addContact(contact).pipe(
+      tap(() => this.getContacts())
+    ).subscribe(() => this._isSubmitting.next(false));
+  }
+
+  updateContact(contact: IContact): void {
+    this._isSubmitting.next(true);
+
     console.log(contact);
-    return contact && contact.id
+
+    this._contacts.next(this._contacts.value.map((c) => {
+      return contact.id === c.id ? contact : c;
+    }));
+
+    this.dataService.updateContact(contact).pipe(
+      catchError((e) => {console.error(e); return of(null)}),
+      tap(() => this.getContacts())
+    ).subscribe(() => this._isSubmitting.next(false));
+  }
+
+  deleteContact(contact: IContact): void {
+    this._contacts.next(this._contacts.value.filter((c) => c.id !== contact.id));
+
+    (contact && contact.id
       ? this.dataService.deleteContact(contact.id).pipe(
-          catchError((err) => {
-            console.error(err);
-            return of(null);
+          catchError((err) => {console.error(err);return of(null);
           }),
-          tap(() =>
-            this._contacts.next(
-              this._contacts.value.filter((c) => c.id !== contact.id)
-            )
-          )
+          tap(() =>this.getContacts())
         )
-      : of(null);
+      : of(null)).subscribe(() => {});
   }
 }
 

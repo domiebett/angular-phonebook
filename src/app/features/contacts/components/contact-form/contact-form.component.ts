@@ -1,21 +1,36 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IContact } from '../../models/contacts';
 import { ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { NgxMaskDirective } from 'ngx-mask';
 import { CommonModule } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './contact-form.component.html',
   styleUrl: './contact-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactFormComponent implements OnInit, OnDestroy {
-  @Input() contact: IContact | null = null;
+  
   @Input() isSubmitting: boolean = false;
   @Input() resetForm$: Observable<any> | null = null;
+  // Populate the form fields based on the contact provided.
+  @Input() set contact(value: IContact | undefined) {
+    if (value) {
+      this.form.patchValue({
+        firstName: value.firstName,
+        lastName: value.lastName,
+        email: value.email,
+        phone: value.phone,
+        address: value.address,
+        favorite: value.favorite,
+        group: value.group,
+      })
+    }
+  }
 
   @Output() onSubmit: EventEmitter<IContact> = new EventEmitter<IContact>();
 
@@ -27,11 +42,11 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       email: ['', [Validators.email]],
       address: [''],
-      favorite: [false],
       group: [''],
-      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      favorite: [false],
     });
   }
 
@@ -48,7 +63,6 @@ export class ContactFormComponent implements OnInit, OnDestroy {
       return;
     }
     this.onSubmit.emit(this.form.value);
-    this.resetForm();
   }
 
   resetForm() {

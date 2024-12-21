@@ -74,6 +74,16 @@ export class DataService {
     return of(contact);
   }
 
+  updateContact(updatedContact: IContact): Observable<IContact> {
+    const contactIndex = contacts.findIndex((contact) => contact.id === updatedContact.id)
+
+    if (contactIndex === undefined) {
+      return throwError(() => ({status: 404, message: 'Contact not found'}));
+    }
+    contacts.splice(contactIndex, 1, updatedContact);
+    return of(contacts[contactIndex]);
+  }
+
   deleteContact(contactId: string): Observable<null> {
     const contact = contacts.find((contact) => contact.id === contactId);
     if (!contact) {

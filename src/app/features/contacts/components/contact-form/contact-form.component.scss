@@ -2,7 +2,7 @@
 @import 'src/app/shared/styles/inputs.scss';
 
 fieldset {
-  @apply border border-gray-300 dark:border-gray-700 rounded-lg px-3 pt-1 pb-3;
+  @apply border border-gray-400 dark:border-gray-700 rounded-lg px-3 pt-1 pb-3;
 
   legend {
     @apply text-xs;
