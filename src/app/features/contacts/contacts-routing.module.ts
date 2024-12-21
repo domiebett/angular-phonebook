@@ -11,6 +11,14 @@ const routes: Routes = [
       import('./components/add-contact/add-contact.component').then(
         (c) => c.AddContactComponent
       ),
+      pathMatch: 'full'
+  },
+  {
+    path: ':contactId',
+    loadComponent: () =>
+      import('./components/contact-view/contact-view.component').then(
+        (c) => c.ContactViewComponent
+      ),
   },
 ];
 

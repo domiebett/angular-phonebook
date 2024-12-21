@@ -21,26 +21,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './contact-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactListComponent implements OnDestroy {
+export class ContactListComponent {
   faMagnifyingGlass = faMagnifyingGlass;
   faPlus = faPlus;
 
   contacts$!: Observable<IContact[]>;
-  deleteContactSubscription?: Subscription;
 
   constructor(private contactService: ContactService) {
     this.contacts$ = this.contactService.contacts$;
   }
 
   deleteContact(contact: IContact) {
-    this.deleteContactSubscription = this.contactService
-      .deleteContact(contact)
-      .subscribe(() =>
-        this.contactService.getContacts({ disableLoading: true })
-      );
-  }
-
-  ngOnDestroy() {
-    this.deleteContactSubscription?.unsubscribe();
+    this.contactService.deleteContact(contact);
   }
 }

@@ -7,8 +7,8 @@
     }
 
     @for (contact of contacts; track contact.id) {
-      <li class="px-3 py-2 border-b border-b-gray-200 dark:border-b-gray-800 last:border-b-0 cursor-pointer flex flex-row justify-between">
-        <div>
+      <li class="px-3 py-2 border-b border-b-gray-200 dark:border-b-gray-800 last:border-b-0 cursor-pointer flex flex-row justify-between" [ngClass]="{'opacity-50': contact.isSubmitting}">
+        <div (click)="viewContact(contact)" class="flex-1">
           <h5 class="h5 txt-primary">{{contact.firstName}} {{contact.lastName}}</h5>
           <span class="txt-secondary text-xs flex flex-row gap-2"><fa-icon [icon]="faPhone"></fa-icon> {{contact.phone}}</span>
         </div>
