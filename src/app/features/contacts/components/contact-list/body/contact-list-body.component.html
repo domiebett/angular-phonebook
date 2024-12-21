@@ -13,7 +13,7 @@
           <span class="txt-secondary text-xs flex flex-row gap-2"><fa-icon [icon]="faPhone"></fa-icon> {{contact.phone}}</span>
         </div>
 
-        <button class="btn-text btn-danger btn-sm"><fa-icon [icon]="faTrash"></fa-icon></button>
+        <button class="btn-text btn-danger btn-sm" (click)="handleDelete(contact)"><fa-icon [icon]="faTrash"></fa-icon></button>
       </li>
     }
   </ul>
