@@ -3,33 +3,64 @@
     <legend class="txt-secondary">Names</legend>
 
     <label for="contact-first-name">
-      <span class="txt-secondary text-sm">First Name</span>
-      <input formControlName="firstName" id="contact-first-name" type="text" class="input" placeholder="John" />
+      <span class="txt-secondary text-sm">First Name *
+        @if (controlHasError('firstName', 'required')) {
+          <span class="txt-danger text-xs">
+            is required
+          </span>
+        }
+      </span>
+      <input formControlName="firstName" id="contact-first-name" type="text" class="input" placeholder="John"
+        [ngClass]="getControlClass('firstName')" />
     </label>
 
     <label for="contact-last-name">
-      <span class="txt-secondary text-sm">Last Name</span>
-      <input formControlName="lastName" id="contact-last-name" type="text" class="input" placeholder="Doe" />
+      <span class="txt-secondary text-sm">Last Name *
+        @if (controlHasError('lastName', 'required')) {
+          <span class="txt-danger text-xs">
+            is required
+          </span>
+        }
+      </span>
+      <input formControlName="lastName" id="contact-last-name" type="text" class="input" placeholder="Doe" [ngClass]="getControlClass('lastName')" />
     </label>
   </fieldset>
 
   <fieldset class="flex flex-col gap-3">
-    <legend class="txt-secondary">Contacts Details</legend>
+    <legend class="txt-secondary">Contact Details</legend>
 
     <label>
-      <span class="txt-secondary text-sm">Phone</span>
+      <span class="txt-secondary text-sm">Phone *
+        @if (controlHasError('phone', 'required')) {
+          <span class="txt-danger text-xs">
+            is required
+          </span>
+        }
+        @else if (controlHasError('phone', 'pattern')) {
+          <span class="txt-danger text-xs">
+            is invalid
+          </span>
+        }
+      </span>
 
-      <input formControlName="phone" class="input" type="tel" placeholder="0701 123 456" />
+      <input formControlName="phone" class="input" type="tel" placeholder="0701 123 456" [ngClass]="getControlClass('phone')" />
     </label>
 
     <label>
-      <span class="txt-secondary text-sm">Email</span>
-      <input formControlName="email" class="input" type="email" placeholder="johndoe@example.com" />
+      <span class="txt-secondary text-sm">Email
+
+        @if (controlHasError('email', 'email')) {
+          <span class="txt-danger text-xs">
+            is invalid
+          </span>
+        }
+      </span>
+      <input formControlName="email" class="input" type="email" placeholder="johndoe@example.com" [ngClass]="getControlClass('email')" />
     </label>
 
     <label>
       <span class="txt-secondary text-sm">Physical Address</span>
-      <input formControlName="address" class="input" type="text" placeholder="1234 City, Country" />
+      <input formControlName="address" class="input" type="text" placeholder="1234 City, Country" [ngClass]="getControlClass('address')" />
     </label>
   </fieldset>
 
@@ -38,11 +69,11 @@
 
     <label>
       <span class="txt-secondary txt-sm">Group</span>
-      <input formControlName="group" class="input" type="text" placeholder="Family" />
+      <input formControlName="group" class="input" type="text" placeholder="Family" [ngClass]="getControlClass('group')" />
     </label>
   </fieldset>
 
   <footer class="flex flex-row justify-end items-center">
-    <button class="btn btn-primary">Save</button>
+    <button class="btn btn-primary" [disabled]="form.invalid">Save</button>
   </footer>
 </form>

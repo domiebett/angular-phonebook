@@ -1,8 +1,20 @@
+@mixin highlightedInput {
+  @apply border-[0.125rem] box-content px-[0.4375rem] py-[0.1875rem];
+}
+
 .input {
   @apply bg-transparent rounded-md px-[0.5rem] py-[0.25rem] border-[0.0625rem] border-gray-600 dark:border-gray-500 outline-none;
 
   &:focus {
-    @apply border-blue-600 dark:border-blue-500 border-[0.125rem] box-content px-[0.4375rem] py-[0.1875rem];
+    @include highlightedInput();
+
+    @apply border-blue-600 dark:border-blue-500;
+  }
+
+  &.input-error {
+    @include highlightedInput();
+
+    @apply border-red-600 dark:border-red-500;
   }
   
   &.input-sm {

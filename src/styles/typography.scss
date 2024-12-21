@@ -25,3 +25,7 @@
 .txt-secondary {
   @include textSecondary();
 }
+
+.txt-danger {
+  @include txtDanger();
+}
