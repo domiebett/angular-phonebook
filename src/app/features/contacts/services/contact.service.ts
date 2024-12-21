@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, delay, Observable, of, Subject, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  delay,
+  Observable,
+  of,
+  Subject,
+  tap,
+} from 'rxjs';
 import { IContact } from '../models/contacts';
 import { DataService } from 'src/app/temp/data.service';
 
@@ -19,8 +27,8 @@ export class ContactService {
     this.getContacts();
   }
 
-  getContacts() {
-    this._loading.next(true);
+  getContacts(options: IContactOptions = {}) {
+    this._loading.next(!options.disableLoading);
 
     this.dataService
       .getContacts()
@@ -45,4 +53,25 @@ export class ContactService {
         )
       );
   }
+
+  deleteContact(contact: IContact): Observable<null> {
+    console.log(contact);
+    return contact && contact.id
+      ? this.dataService.deleteContact(contact.id).pipe(
+          catchError((err) => {
+            console.error(err);
+            return of(null);
+          }),
+          tap(() =>
+            this._contacts.next(
+              this._contacts.value.filter((c) => c.id !== contact.id)
+            )
+          )
+        )
+      : of(null);
+  }
+}
+
+interface IContactOptions {
+  disableLoading?: boolean;
 }

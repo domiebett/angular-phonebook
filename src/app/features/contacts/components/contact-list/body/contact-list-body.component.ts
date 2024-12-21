@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { IContact } from '../../../models/contacts';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +14,15 @@ import { faTrash, faPhone } from '@fortawesome/free-solid-svg-icons';
 export class ContactListBodyComponent {
   @Input() contacts: IContact[] | null = [];
 
+  @Output() onDelete = new EventEmitter<IContact>();
+
   faTrash = faTrash;
   faPhone = faPhone;
+
+  handleDelete(contact: IContact) {
+    const confirmDelete = window.confirm('Are you sure you would like to delete the contact?');
+    if (confirmDelete) {
+      this.onDelete.emit(contact);
+    }
+  }
 }

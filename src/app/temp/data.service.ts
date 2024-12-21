@@ -28,7 +28,7 @@ const contacts: IContact[] = [
     image: 'http://google.com',
     lastViewed: new Date(),
     phone: '0711454568',
-    deleted: false,
+    deleted: true,
   },
   {
     id: 'uieutieutiugh',
@@ -52,10 +52,11 @@ export class DataService {
   constructor() {}
 
   getContacts(): Observable<IContact[]> {
-    return of(contacts);
+    return of(contacts.filter((contact) => !contact.deleted));
   }
 
   getContact(contactId: string): Observable<IContact> {
+    console.log('getting data');
     const contact = contacts.find((contact) => contact.id === contactId);
 
     if (!contact) {
