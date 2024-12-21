@@ -10,6 +10,6 @@
   </header>
   
   <section class="flex flex-col gap-1 panel-secondary rounded-lg px-4 py-3">
-    <app-contact-form></app-contact-form>
+    <app-contact-form [isSubmitting]="isSubmitting" (onSubmit)="addContact($event)"></app-contact-form>
   </section>
 </article>

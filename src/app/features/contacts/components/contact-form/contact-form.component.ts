@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IContact } from '../../models/contacts';
 import { ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact-form',
@@ -11,12 +12,16 @@ import { CommonModule } from '@angular/common';
   styleUrl: './contact-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactFormComponent {
-  @Input() contact: IContact | {} = {};
+export class ContactFormComponent implements OnInit, OnDestroy {
+  @Input() contact: IContact | null = null;
+  @Input() isSubmitting: boolean = false;
+  @Input() resetForm$: Observable<any> | null = null;
 
   @Output() onSubmit: EventEmitter<IContact> = new EventEmitter<IContact>();
 
   form: FormGroup;
+
+  resetFormSubscription?: Subscription;
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -30,6 +35,12 @@ export class ContactFormComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.resetFormSubscription = this.resetForm$?.subscribe(() => {
+      this.resetForm()
+    });
+  }
+
   handleSubmit() {
     if (this.form.invalid) {
       console.error('Form is invalid');
@@ -37,6 +48,10 @@ export class ContactFormComponent {
       return;
     }
     this.onSubmit.emit(this.form.value);
+    this.resetForm();
+  }
+
+  resetForm() {
     this.form.reset();
   }
 
@@ -54,5 +69,9 @@ export class ContactFormComponent {
       control.touched &&
       (error ? control.hasError(error) : true)
     );
+  }
+
+  ngOnDestroy(): void {
+    this.resetFormSubscription?.unsubscribe();
   }
 }

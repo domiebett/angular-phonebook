@@ -74,6 +74,6 @@
   </fieldset>
 
   <footer class="flex flex-row justify-end items-center">
-    <button class="btn btn-primary" [disabled]="form.invalid">Save</button>
+    <button class="btn btn-primary" [disabled]="form.invalid || isSubmitting">Save</button>
   </footer>
 </form>

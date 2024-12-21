@@ -18,6 +18,10 @@
   }
   
   &.input-sm {
-    @apply px-2 py-1 rounded-md;
+    @apply px-[0.5rem] py-[0.25rem] rounded-md;
+
+    &:focus {
+      @include highlightedInput();
+    }
   }
 }
