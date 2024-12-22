@@ -82,6 +82,15 @@ export class ContactService {
         )
       : of(null)).subscribe(() => {});
   }
+
+  deleteContacts(contactIds: Set<string>): void {
+    this._contacts.next(this._contacts.value.filter((c) => c.id ? contactIds.has(c.id) : true));
+
+    this.dataService.deleteContacts(Array.from(contactIds)).pipe(
+      take(1),
+      finalize(() => this.getContacts({disableLoading: true}))
+    ).subscribe(() => {});
+  }
 }
 
 interface IContactOptions {

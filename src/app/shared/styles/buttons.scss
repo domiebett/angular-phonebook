@@ -1,6 +1,6 @@
 /** BUTTON MIXINS **/
 @mixin sharedBtn {
-  @apply cursor-pointer outline-none;
+  @apply cursor-pointer outline-none flex flex-row items-center justify-center;
 
   &:disabled {
     @apply opacity-50 cursor-not-allowed;    

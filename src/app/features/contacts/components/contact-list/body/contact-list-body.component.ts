@@ -18,6 +18,10 @@ export class ContactListBodyComponent {
 
   @Output() onDelete = new EventEmitter<IContact>();
 
+  @Output() onSelection = new EventEmitter<Set<string>>();
+
+  selectedContactIds = new Set<string>();
+
   faTrash = faTrash;
   faPhone = faPhone;
 
@@ -29,6 +33,20 @@ export class ContactListBodyComponent {
       return;
     }
     this.router.navigate(['contacts', contact.id]);
+  }
+
+  toggleContactSelection(contact: IContact) {
+    if (!contact.id || contact.isSubmitting) {
+      return; // we dont want to select a contact without an id or one that is not done being saved.
+    }
+
+    if (this.selectedContactIds.has(contact.id)) {
+      this.selectedContactIds.delete(contact.id);
+    } else {
+      this.selectedContactIds.add(contact.id);
+    }
+
+    this.onSelection.emit(this.selectedContactIds);
   }
 
   handleDelete(contact: IContact) {
