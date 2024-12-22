@@ -26,12 +26,30 @@ export class ContactListComponent {
   faPlus = faPlus;
 
   contacts$!: Observable<IContact[]>;
+  selectedContactIds: Set<string> = new Set([]);
 
-  constructor(private contactService: ContactService) {
+  constructor(public contactService: ContactService) {
     this.contacts$ = this.contactService.contacts$;
+  }
+
+  filterContacts(searchTerm: string) {
+    this.contactService.getContacts({filters: {searchTerm: searchTerm}})
+  }
+
+  handleContactSelection(contactIds: Set<string>) {
+    this.selectedContactIds = contactIds;
   }
 
   deleteContact(contact: IContact) {
     this.contactService.deleteContact(contact);
+  }
+
+  deleteSelectedContacts() {
+    const confirmed = window.confirm('Are you sure you would like to delete all selected contacts?');
+
+    if (confirmed) {
+      this.contactService.deleteContacts(this.selectedContactIds);
+      this.selectedContactIds = new Set();
+    }
   }
 }

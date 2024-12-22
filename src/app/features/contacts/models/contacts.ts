@@ -12,3 +12,9 @@ export interface IContact {
   deleted?: boolean;
   isSubmitting?: boolean;
 }
+
+export interface ContactFilterOptions {
+  searchTerm?: string;
+  showDeleted?: boolean;
+}
+

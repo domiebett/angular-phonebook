@@ -3,13 +3,13 @@ import {
   BehaviorSubject,
   catchError,
   delay,
+  finalize,
   Observable,
   of,
   Subject,
   take,
-  tap,
 } from 'rxjs';
-import { IContact } from '../models/contacts';
+import { ContactFilterOptions, IContact } from '../models/contacts';
 import { DataService } from 'src/app/temp/data.service';
 
 @Injectable({
@@ -31,7 +31,7 @@ export class ContactService {
   getContacts(options: IContactOptions = {}) {
     this._isFetching.next(!options.disableLoading);
 
-    this.dataService.getContacts().pipe(
+    this.dataService.getContacts(options.filters ?? {}).pipe(
       take(1),
       catchError((error) => {console.error(error);return of([]);})
     ).subscribe((contacts) => {
@@ -50,9 +50,8 @@ export class ContactService {
     this._contacts.next([...this._contacts.value, {...contact, isSubmitting: true}]);
 
     this.dataService.addContact(contact).pipe(
-      delay(2000),
       take(1),
-      tap(() => this.getContacts())
+      finalize(() => this.getContacts({disableLoading: true}))
     ).subscribe(() => this._isSubmitting.next(false));
   }
 
@@ -66,11 +65,12 @@ export class ContactService {
     this.dataService.updateContact(contact).pipe(
       take(1),
       catchError((e) => {console.error(e); return of(null)}),
-      tap(() => this.getContacts())
+      finalize(() => this.getContacts({disableLoading: true}))
     ).subscribe(() => this._isSubmitting.next(false));
   }
 
   deleteContact(contact: IContact): void {
+    // delete contacts while sending the request to the backend.
     this._contacts.next(this._contacts.value.filter((c) => c.id !== contact.id));
 
     (contact && contact.id
@@ -78,12 +78,22 @@ export class ContactService {
         take(1),  
         catchError((err) => {console.error(err);return of(null);
           }),
-          tap(() =>this.getContacts())
+          finalize(() =>this.getContacts({disableLoading: true}))
         )
       : of(null)).subscribe(() => {});
+  }
+
+  deleteContacts(contactIds: Set<string>): void {
+    this._contacts.next(this._contacts.value.filter((c) => c.id ? contactIds.has(c.id) : true));
+
+    this.dataService.deleteContacts(Array.from(contactIds)).pipe(
+      take(1),
+      finalize(() => this.getContacts({disableLoading: true}))
+    ).subscribe(() => {});
   }
 }
 
 interface IContactOptions {
-  disableLoading?: boolean;
+  disableLoading?: boolean; // prevents updating the isFetching subject.
+  filters?: ContactFilterOptions;
 }
