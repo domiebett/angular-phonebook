@@ -3,6 +3,8 @@ import { IContact } from '../../models/contacts';
 import { ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
+import { CountryCode } from 'libphonenumber-js';
+import { phoneNumberValidator } from 'src/app/shared/validators/phoneNumberValidator';
 
 @Component({
   selector: 'app-contact-form',
@@ -37,11 +39,14 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
   resetFormSubscription?: Subscription;
 
+  // TODO: Make this a selection instead of hardcoding the country code.
+  country: {name: string, code: CountryCode} = {name: 'Kenya', code: 'KE'};
+
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      phone: ['', [Validators.required, phoneNumberValidator(this.country.code)]],
       email: ['', [Validators.email]],
       address: [''],
       group: [''],

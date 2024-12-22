@@ -50,17 +50,35 @@
   &.btn-sm {
     @apply h-8 w-8 min-h-8 min-w-8 text-sm;
   }
+
+  &.btn-xs {
+    @apply h-6 w-6 min-h-6 min-w-6 text-sm;
+  }
+}
+
+.btn-square {
+  @include sharedBtn();
+  @apply rounded-none h-10 min-h-10 w-10 min-w-10 text-base;
+
+  &.btn-sm {
+    @apply h-8 w-8 min-h-8 min-w-8 text-sm;
+  }
 }
 
 .btn {
   @include sharedBtn();
   @apply rounded-md px-4 py-1 min-w-32 text-base;
+
+  &.btn-lg {
+    @apply px-4 py-2 text-lg;
+  }
 }
 
 /** BUTTON COLORS **/
 .btn,
 .btn-circle,
-.btn-squircle {
+.btn-squircle,
+.btn-square {
 
   /** Styling **/
   &.btn-primary {

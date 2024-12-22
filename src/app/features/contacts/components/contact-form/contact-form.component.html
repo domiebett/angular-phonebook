@@ -1,6 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="handleSubmit()" class="overflow-hidden flex flex-col gap-5">
-  <fieldset class="grid grid-cols-2 gap-4">
-    <legend class="txt-secondary">Names</legend>
+  <section class="grid grid-cols-2 gap-4">
 
     <label for="contact-first-name">
       <span class="txt-secondary text-sm">First Name *
@@ -24,10 +23,9 @@
       </span>
       <input formControlName="lastName" id="contact-last-name" type="text" class="input" placeholder="Doe" [ngClass]="getControlClass('lastName')" />
     </label>
-  </fieldset>
+  </section>
 
-  <fieldset class="flex flex-col gap-3">
-    <legend class="txt-secondary">Contact Details</legend>
+  <section class="flex flex-col gap-3">
 
     <label>
       <span class="txt-secondary text-sm">Phone *
@@ -36,7 +34,7 @@
             is required
           </span>
         }
-        @else if (controlHasError('phone', 'pattern')) {
+        @else if (controlHasError('phone', 'invalidPhoneNumber')) {
           <span class="txt-danger text-xs">
             is invalid
           </span>
@@ -51,7 +49,7 @@
 
         @if (controlHasError('email', 'email')) {
           <span class="txt-danger text-xs">
-            is invalid
+            format is invalid
           </span>
         }
       </span>
@@ -62,18 +60,17 @@
       <span class="txt-secondary text-sm">Physical Address</span>
       <input formControlName="address" class="input" type="text" placeholder="1234 City, Country" [ngClass]="getControlClass('address')" />
     </label>
-  </fieldset>
+  </section>
 
-  <fieldset class="flex flex-col">
-    <legend class="txt-secondary">Misc</legend>
+  <section class="flex flex-col">
 
     <label>
       <span class="txt-secondary txt-sm">Group</span>
       <input formControlName="group" class="input" type="text" placeholder="Family" [ngClass]="getControlClass('group')" />
     </label>
-  </fieldset>
+  </section>
 
   <footer class="flex flex-row justify-end items-center">
-    <button class="btn btn-primary" [disabled]="form.invalid || !form.dirty || isSubmitting">Save</button>
+    <button class="btn btn-primary btn-lg" [disabled]="form.invalid || !form.dirty || isSubmitting">Save</button>
   </footer>
 </form>
