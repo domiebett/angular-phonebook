@@ -24,6 +24,10 @@ export class ContactListBodyComponent {
   constructor(private router: Router) {}
 
   viewContact(contact: IContact) {
+    // only open fully updated contacts.
+    if (contact.isSubmitting) {
+      return;
+    }
     this.router.navigate(['contacts', contact.id]);
   }
 

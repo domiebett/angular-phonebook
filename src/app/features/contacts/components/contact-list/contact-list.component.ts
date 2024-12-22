@@ -31,6 +31,10 @@ export class ContactListComponent {
     this.contacts$ = this.contactService.contacts$;
   }
 
+  filterContacts(searchTerm: string) {
+    this.contactService.getContacts({filters: {searchTerm: searchTerm}})
+  }
+
   deleteContact(contact: IContact) {
     this.contactService.deleteContact(contact);
   }

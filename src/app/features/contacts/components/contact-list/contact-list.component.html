@@ -1,5 +1,5 @@
 <article class="px-3 py-3 rounded-xl w-full flex flex-col gap-5">
-  <app-contact-list-header></app-contact-list-header>
+  <app-contact-list-header (onSearch)="filterContacts($event)"></app-contact-list-header>
 
   <app-contact-list-body [contacts]="contacts$ | async" (onDelete)="deleteContact($event)"></app-contact-list-body>
   

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, of, throwError } from 'rxjs';
-import { IContact } from '../features/contacts/models/contacts';
+import { ContactFilterOptions, IContact } from '../features/contacts/models/contacts';
 
 const contacts: IContact[] = [
   {
@@ -51,8 +51,9 @@ const contacts: IContact[] = [
 export class DataService {
   constructor() {}
 
-  getContacts(): Observable<IContact[]> {
-    return of(contacts.filter((contact) => !contact.deleted));
+  getContacts(filterOptions: ContactFilterOptions = {}): Observable<IContact[]> {
+    const filterCallbacks = this.createFilters(filterOptions);
+    return of(this.filterContacts([...contacts], filterCallbacks));
   }
 
   getContact(contactId: string): Observable<IContact> {
@@ -93,6 +94,34 @@ export class DataService {
     return of(null);
   }
 
+  private filterContacts(contacts: IContact[], filters: ContactFilter[]): IContact[] {
+    return contacts.filter((contact) => {
+      return filters.every((filter) => filter(contact))
+    });
+  }
+
+  private createFilters(filterOptions: ContactFilterOptions = {}) {
+    const filters: ContactFilter[] = [];
+
+    if (filterOptions.searchTerm && filterOptions.searchTerm.trim()) {
+      const lowerCaseSearchTerm = filterOptions.searchTerm.toLowerCase();
+      filters.push((contact: IContact) => (
+        contact.firstName.toLowerCase().includes(lowerCaseSearchTerm) ||
+        contact.lastName.toLowerCase().includes(lowerCaseSearchTerm) ||
+        contact.email.toLowerCase().includes(lowerCaseSearchTerm) ||
+        contact.phone.toLowerCase().includes(lowerCaseSearchTerm)
+      ));
+    }
+
+    if (filterOptions.showDeleted) {
+      filters.push(() => true);
+    } else {
+      filters.push((contact: IContact) => !contact.deleted);
+    }
+
+    return filters;
+  }
+
   private generateRandomId() {
     return (
       'id-' +
@@ -101,3 +130,5 @@ export class DataService {
     );
   }
 }
+
+type ContactFilter = ((contact: IContact) => boolean);
